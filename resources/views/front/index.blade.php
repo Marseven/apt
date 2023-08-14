@@ -132,28 +132,51 @@
     <!-- Start of about section
    ============================================= -->
     <section id="nio-ins-about" class="nio-ins-about-section">
-        <div class="row">
-            <div class="col-lg-6">
+        <div class="content">
+
+            <div class="nio-ins-video-wrapper">
+                <div class="nio-ins-section-title text-center middle-align text pera-content headline">
+                    <span style="color: #29418F">Akanda Pour Tous</span>
+                    <h1>Pour une commune dynamique et prospère</h1>
+                </div>
                 <div class="nio-ins-video-area">
-                    <div class="nio-ins-video-play position-relative">
-                        <img src="{{ asset('front/images/youtube1.png') }}" alt="">
-                        <a class="video_box" href="https://www.youtube.com/watch?v=QRe9PdKTyzE">
-                            <i class="fas fa-play"></i>
-                        </a>
+                    <div class="nio-ins-video-play position-relative" style="max-width: 60% !important;">
+                        <img src="{{ asset('front/images/Slide2.jpeg') }}" alt="">
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="nio-ins-video-area">
-                    <div class="nio-ins-video-play position-relative">
-                        <img src="{{ asset('front/images/youtube2.png') }}" alt="">
-                        <a class="video_box" href="https://www.youtube.com/watch?v=UVaHrgzDR-0">
-                            <i class="fas fa-play"></i>
-                        </a>
+            <br><br><br><br><br>
+            <div class="nio-ins-video-wrapper">
+                <div class="nio-ins-section-title text-center middle-align text pera-content headline">
+                    <span style="color: #29418F">Akanda Pour Tous</span>
+                    <h1>Des Actions Concrètes</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="nio-ins-video-area">
+                        <div class="nio-ins-video-play position-relative">
+                            <img src="{{ asset('front/images/youtube1.png') }}" alt="">
+                            <a class="video_box" href="https://www.youtube.com/watch?v=QRe9PdKTyzE">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="nio-ins-video-area">
+                        <div class="nio-ins-video-play position-relative">
+                            <img src="{{ asset('front/images/youtube2.png') }}" alt="">
+                            <a class="video_box" href="https://www.youtube.com/watch?v=UVaHrgzDR-0">
+                                <i class="fas fa-play"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
+
     </section>
     <!-- End of about section
    ============================================= -->
