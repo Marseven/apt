@@ -4,7 +4,7 @@
 <head>
 
     <meta charset="utf-8" />
-    <title>Connexion | CIIAG</title>
+    <title>Connexion | Akanda Pour Tous</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="#" name="description" />
     <meta content="CodeurX" name="author" />
