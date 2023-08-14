@@ -37,6 +37,11 @@ class WelcomeController extends BasicController
     //
     public function index()
     {
+        return view('front.index');
+    }
+
+    public function partisan()
+    {
         return view('front.form');
     }
 

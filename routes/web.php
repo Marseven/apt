@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 //home
 Route::get('/', [WelcomeController::class, 'index'])->name('home');
 
+Route::get('/partisan', [WelcomeController::class, 'partisan'])->name('partisan');
+
 //Membre
 Route::post('/member', [WelcomeController::class, 'register'])->name('register');
 
