@@ -124,7 +124,7 @@
     <!-- Start of slider section
    ============================================= -->
     <div class="nio-ins-slider text-center">
-        <img src="{{ asset('front/images/slide.jpg') }}" alt="">
+        <img src="{{ asset('front/images/Slide.jpg') }}" alt="">
     </div>
     <!-- End of slider section
    ============================================= -->
