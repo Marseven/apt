@@ -39,7 +39,7 @@
 <body>
     <div class="ugf-wrapper">
         <div class="logo">
-            <a href="">
+            <a href="{{ route('home') }}">
                 <img src="{{ asset('front/images/logo.png') }}" class="img-fluid logo-white" alt="logo">
                 <img src="{{ asset('front/images/logo-dark.png') }}" class="img-fluid logo-black" alt="logo">
             </a>
