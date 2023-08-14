@@ -131,7 +131,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ url('/admin/list-votes') }}" class="waves-effect">
+                            <a href="#" class="waves-effect">
                                 <i class="bx bxs-envelope"></i>
                                 <span key="t-command">Bilan de Vote</span>
                             </a>
