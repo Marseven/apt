@@ -140,7 +140,7 @@
                     <h1>Pour une commune dynamique et prospère</h1>
                 </div>
                 <div class="nio-ins-video-area">
-                    <div class="nio-ins-video-play position-relative">
+                    <div class="nio-ins-video-play position-relative" style="max-width: 60%;">
                         <img src="{{ asset('front/images/Slide2.jpeg') }}" alt="">
                     </div>
                 </div>
