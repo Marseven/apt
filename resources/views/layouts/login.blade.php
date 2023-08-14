@@ -9,7 +9,7 @@
     <meta content="#" name="description" />
     <meta content="CodeurX" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="icon" href="{{ asset('front/images/ico_apt.png') }}">
 
     <!-- Bootstrap Css -->
     <link href="{{ asset('admin/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet" type="text/css" />
