@@ -21,10 +21,7 @@
                             <input type="text" name="firstname" class="form-control" id="input-firstname" required>
                             <label for="input-firstname">Prénom</label>
                         </div>
-                        <div class="form-group">
-                            <input type="text" name="firstname" class="form-control" id="input-firstname">
-                            <label for="input-firstname">Prénom</label>
-                        </div>
+
                         <div class="form-group">
                             <input type="tel" name="phone" class="form-control" id="input-phone" required>
                             <label for="input-phone">Téléphone</label>
