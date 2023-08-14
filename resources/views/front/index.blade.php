@@ -137,8 +137,7 @@
                 <div class="nio-ins-video-area">
                     <div class="nio-ins-video-play position-relative">
                         <img src="{{ asset('front/images/youtube1.png') }}" alt="">
-                        <a class="video_box"
-                            href="https://www.youtube.com/watch?v=QRe9PdKTyzE&ab_channel=CommunicationGouvernementaleGabon">
+                        <a class="video_box" href="https://www.youtube.com/watch?v=QRe9PdKTyzE">
                             <i class="fas fa-play"></i>
                         </a>
                     </div>
@@ -148,8 +147,7 @@
                 <div class="nio-ins-video-area">
                     <div class="nio-ins-video-play position-relative">
                         <img src="{{ asset('front/images/youtube2.png') }}" alt="">
-                        <a class="video_box"
-                            href="https://www.youtube.com/watch?v=UVaHrgzDR-0&ab_channel=CommunicationGouvernementaleGabon">
+                        <a class="video_box" href="https://www.youtube.com/watch?v=UVaHrgzDR-0">
                             <i class="fas fa-play"></i>
                         </a>
                     </div>
