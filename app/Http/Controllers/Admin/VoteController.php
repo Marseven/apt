@@ -7,6 +7,7 @@ use App\Models\Candidat;
 use App\Models\Desk;
 use App\Models\Vote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VoteController extends Controller
 {
@@ -45,12 +46,11 @@ class VoteController extends Controller
 
         // Total records
         $totalRecords = Desk::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Desk::select('count(*) as allcount')->where('label', 'like', '%' . $searchValue . '%')->orWhere('hood', 'like', '%' . $searchValue . '%')->count();
+        $totalRecordswithFilter = Desk::select('count(*) as allcount')->where('label', 'like', '%' . $searchValue . '%')->count();
 
         // Fetch records
         $records = Desk::orderBy($columnName, $columnSortOrder)
             ->where('desks.label', 'like', '%' . $searchValue . '%')
-            ->orWhere('desks.hood', 'like', '%' . $searchValue . '%')
             ->select('desks.*')
             ->skip($start)
             ->take($rowperpage)
@@ -62,14 +62,21 @@ class VoteController extends Controller
 
             $id = $record->id;
             $label = '<a href="' . url('admin/delais/' . $record->id . '') . '">' . $record->label . '</a>';
-            $hood = $record->hood;
+
+            $record_cand = Desk::where('id', $record->id)->with(['candidats' => function ($query) {
+                $query->with(['votes' => function ($query) {
+                    $query->orderByDesc('vote')->limit(1);
+                }]);
+            }])->get();
+
+            $candidat = $record_cand->candidats->first();
 
             $actions = '<a class="btn btn-outline-primary btn-sm" href="' . url('admin/delais/' . $record->id . '') . '">Détails</a>';
 
             $data_arr[] = array(
                 "id" => $id,
                 "label" => $label,
-                "hood" => $hood,
+                "candidat" => $candidat ? $candidat->firstname . '' . $candidat->lastname : "Aucun Candidat",
                 "actions" => $actions,
             );
         }
@@ -139,8 +146,12 @@ class VoteController extends Controller
     {
         $vote = new Vote();
 
-        $vote->label = $request->label;
-        $vote->date_election = $request->date_election;
+        $candidat = Candidat::find($request->candidat_id);
+        $vote->vote = $request->vote;
+        $vote->candidat_id = $request->candidat_id;
+        $vote->election_id = $candidat->election_id;
+        $vote->desk_id = $request->desk_id;
+        $vote->user_id = Auth::user()->id;
 
         if ($vote->save()) {
             return back()->with('success', "Le résultat a bien été enregistré.");
@@ -158,8 +169,11 @@ class VoteController extends Controller
                 return back()->with('error', "Une erreur s'est produite.");
             }
         } else {
-            $vote->label = $request->label;
-            $vote->date_election = $request->date_election;
+            $candidat = Candidat::find($request->candidat_id);
+            $vote->vote = $request->vote;
+            $vote->candidat_id = $request->candidat_id;
+            $vote->election_id = $candidat->election_id;
+            $vote->desk_id = $request->desk_id;
 
             if ($vote->save()) {
                 return back()->with('success', "Le résultat a bien été mise à jour.");

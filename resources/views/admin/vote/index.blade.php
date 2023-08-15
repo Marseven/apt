@@ -212,91 +212,12 @@
                         data: 'label'
                     },
                     {
-                        data: 'hood'
+                        data: 'candidat'
                     },
                     {
                         data: 'actions'
                     },
                 ]
-            });
-        });
-
-        $(document).on("click", ".modal_view_action", function() {
-
-            var id = $(this).data('id');
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: "{{ route('admin-ajax-desk') }}",
-                dataType: 'json',
-                data: {
-                    "id": id,
-                    "action": "view",
-                },
-                success: function(data) {
-                    //get data value params
-                    var title = data.title;
-                    var body = data.body;
-
-                    $('#cardModalView .modal-title').text(title); //dynamic title
-                    $('#cardModalView .modal-body').html(body); //url to delete item
-                    $('#cardModalView').modal('show');
-                }
-            });
-
-            //show the modal
-        });
-
-
-        $(document).on("click", ".modal_edit_action", function() {
-            var id = $(this).data('id');
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: "{{ route('admin-ajax-desk') }}",
-                dataType: 'json',
-                data: {
-                    "id": id,
-                    "action": "edit",
-                },
-                success: function(data) {
-                    //get data value params
-                    var body = data.body;
-                    //dynamic title
-                    $('#cardModal .modal-content').html(body); //url to delete item
-                    $('#cardModal').modal('show');
-                }
-            });
-
-        });
-
-        $(document).on("click", ".modal_delete_action", function() {
-            var id = $(this).data('id');
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: "{{ route('admin-ajax-desk') }}",
-                dataType: 'json',
-                data: {
-                    "id": id,
-                    "action": "delete",
-                },
-                success: function(data) {
-                    //get data value params
-                    var body = data.body;
-                    //dynamic title
-                    $('#cardModalCenter .modal-footer').html(body); //url to delete item
-                    $('#cardModalCenter').modal('show');
-                }
             });
         });
     </script>

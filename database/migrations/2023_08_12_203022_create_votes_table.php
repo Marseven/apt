@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
             $table->integer('candidat_id');
+            $table->integer('election_id');
             $table->integer('desk_id');
             $table->integer('vote');
             $table->integer('user_id');
