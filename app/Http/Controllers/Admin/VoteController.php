@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Candidat;
+use App\Models\Desk;
+use App\Models\Vote;
 use Illuminate\Http\Request;
 
 class VoteController extends Controller
@@ -11,10 +14,19 @@ class VoteController extends Controller
 
     public function index()
     {
-        return view('admin.member.index');
+        $desks = Desk::all();
+        $candidats = Candidat::all();
+        return view('admin.vote.index', compact('desks', 'candidats'));
     }
 
-    public function  ajaxMembers(Request $request)
+    public function details()
+    {
+        $desks = Desk::all();
+        $candidats = Candidat::all();
+        return view('admin.vote.details', compact('desks', 'candidats'));
+    }
+
+    public function  ajaxVotes(Request $request)
     {
         ## Read value
         $draw = $request->get('draw');
@@ -32,55 +44,36 @@ class VoteController extends Controller
         $searchValue = $search_arr['value']; // Search value
 
         // Total records
-        $totalRecords = Membre::select('count(*) as allcount')->count();
-        $totalRecordswithFilter = Membre::select('count(*) as allcount')->where('lastname', 'like', '%' . $searchValue . '%')->orWhere('firstname', 'like', '%' . $searchValue . '%')->orWhere('phone', 'like', '%' . $searchValue . '%')->count();
+        $totalRecords = Desk::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = Desk::select('count(*) as allcount')->where('label', 'like', '%' . $searchValue . '%')->orWhere('hood', 'like', '%' . $searchValue . '%')->count();
 
         // Fetch records
-        $records = Membre::orderBy($columnName, $columnSortOrder)
-            ->where('membres.lastname', 'like', '%' . $searchValue . '%')
-            ->orWhere('membres.firstname', 'like', '%' . $searchValue . '%')
-            ->orWhere('membres.phone', 'like', '%' . $searchValue . '%')
-            ->select('membres.*')
+        $records = Desk::orderBy($columnName, $columnSortOrder)
+            ->where('desks.label', 'like', '%' . $searchValue . '%')
+            ->orWhere('desks.hood', 'like', '%' . $searchValue . '%')
+            ->select('desks.*')
             ->skip($start)
             ->take($rowperpage)
             ->get();
 
         $data_arr = array();
 
-        $i = 1;
-
         foreach ($records as $record) {
 
-            $id = $i;
-
-            $name = $record->firstname . ' ' . $record->lastname;
-            $phone = $record->phone;
+            $id = $record->id;
+            $label = '<a href="' . url('admin/delais/' . $record->id . '') . '">' . $record->label . '</a>';
             $hood = $record->hood;
 
-            $actions = '<a class="btn btn-outline-primary btn-sm modal_view_action" data-bs-toggle="modal"
-                        data-id="' . $record->id . '"
-                        data-bs-target="#cardModalView" title="view">
-                        <i class="fas fa-eye"></i>
-                    </a>';
-
-            $actions .= '
-                <a class="btn btn-outline-danger btn-sm modal_delete_action" data-bs-toggle="modal"
-                data-id="' . $record->id . '"
-                data-bs-target="#cardModalCenter" title="Delete">
-                <i class="fas fa-trash"></i>
-            </a>';
-
+            $actions = '<a class="btn btn-outline-primary btn-sm" href="' . url('admin/delais/' . $record->id . '') . '">Détails</a>';
 
             $data_arr[] = array(
                 "id" => $id,
-                "name" => $name,
-                "phone" => $phone,
+                "label" => $label,
                 "hood" => $hood,
                 "actions" => $actions,
             );
-
-            $i++;
         }
+
 
         $response = array(
             "draw" => intval($draw),
@@ -92,9 +85,9 @@ class VoteController extends Controller
         return response()->json($response);
     }
 
-    public function  getMember(Request $request)
+    public function  getVote(Request $request)
     {
-        $member = Membre::find($request->id);
+        $member = Desk::find($request->id);
 
         $title = "";
         $body = "";
@@ -140,5 +133,39 @@ class VoteController extends Controller
         );
 
         return response()->json($response);
+    }
+
+    public function create(Request $request)
+    {
+        $vote = new Vote();
+
+        $vote->label = $request->label;
+        $vote->date_election = $request->date_election;
+
+        if ($vote->save()) {
+            return back()->with('success', "Le résultat a bien été enregistré.");
+        } else {
+            return back()->with('error', "Une erreur s'est produite.");
+        }
+    }
+
+    public function update(Request $request, Vote $vote)
+    {
+        if (isset($_POST['delete'])) {
+            if ($vote->delete()) {
+                return back()->with('success', "Le résultat a bien été supprimée !");
+            } else {
+                return back()->with('error', "Une erreur s'est produite.");
+            }
+        } else {
+            $vote->label = $request->label;
+            $vote->date_election = $request->date_election;
+
+            if ($vote->save()) {
+                return back()->with('success', "Le résultat a bien été mise à jour.");
+            } else {
+                return back()->with('error', "Une erreur s'est produite.");
+            }
+        }
     }
 }

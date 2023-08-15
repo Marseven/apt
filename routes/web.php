@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SecurityObjectController;
 use App\Http\Controllers\Admin\SecurityPermissionController;
 use App\Http\Controllers\Admin\SecurityRoleController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VoteController;
 use App\Http\Controllers\Front\WelcomeController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -110,6 +111,14 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::post('/election', [ElectionController::class, 'create'])->name('admin-create-election');
     Route::get('/ajax-elections', [ElectionController::class, 'ajaxElections'])->name('admin-ajax-elections');
     Route::post('/ajax-election', [ElectionController::class, 'getElection'])->name('admin-ajax-election');
+
+    //votes
+    Route::get('/list-votes', [VoteController::class, 'index'])->name('admin-list-desks');
+    Route::post('/vote/{vote}', [VoteController::class, 'updateVote'])->name('admin-update-vote');
+    Route::post('/details/{desk}', [VoteController::class, 'details'])->name('admin-details-desk');
+    Route::post('/vote', [VoteController::class, 'createVote'])->name('admin-create-vote');
+    Route::get('/ajax-votes', [VoteController::class, 'ajaxVotes'])->name('admin-ajax-votes');
+    Route::post('/ajax-vote', [VoteController::class, 'getVote'])->name('admin-ajax-vote');
 
     //users
     Route::get('/admin-profil', [UserController::class, 'profil'])->name('admin-profil');

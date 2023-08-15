@@ -182,7 +182,7 @@ class ElectionController extends Controller
     {
         if (isset($_POST['delete'])) {
             if ($election->delete()) {
-                return back()->with('success', "Le candidat a bien été supprimée !");
+                return back()->with('success', "L'élection a bien été supprimée !");
             } else {
                 return back()->with('error', "Une erreur s'est produite.");
             }

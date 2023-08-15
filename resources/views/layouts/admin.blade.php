@@ -26,6 +26,8 @@
     <!-- App Css-->
     <link href="{{ asset('admin/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" href="{{ asset('front/css/notification.css') }}" />
+
 
 </head>
 
@@ -131,7 +133,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="waves-effect">
+                            <a href="{{ url('/admin/list-votes') }}" class="waves-effect">
                                 <i class="bx bxs-envelope"></i>
                                 <span key="t-command">Bilan de Vote</span>
                             </a>
@@ -243,6 +245,72 @@
 
     <!-- App js -->
     <script src="{{ asset('admin/js/app.js') }}"></script>
+
+    <script src="{{ asset('front/js/notification.js') }}"></script>
+
+    <script>
+        @if ($message = Session::get('success'))
+            const notification3 = new Notification({
+                text: '{{ $message }}',
+                showProgress: false,
+                style: {
+                    background: '#28a745',
+                    color: '#ffffff',
+                    transition: 'all 350ms linear',
+                },
+            });
+        @endif
+
+        @if ($message = Session::get('error'))
+            const notification3 = new Notification({
+                text: '{{ $message }}',
+                showProgress: false,
+                style: {
+                    background: '#dc3545',
+                    color: '#ffffff',
+                    transition: 'all 350ms linear',
+                },
+            });
+        @endif
+
+        @if ($message = Session::get('warning'))
+            const notification3 = new Notification({
+                text: '{{ $message }}',
+                showProgress: false,
+                style: {
+                    background: '#ffc107',
+                    color: '#ffffff',
+                    transition: 'all 350ms linear',
+                },
+            });
+        @endif
+
+        @if ($message = Session::get('info'))
+            const notification3 = new Notification({
+                text: '{{ $message }}',
+                showProgress: false,
+                style: {
+                    background: '#17a2b8',
+                    color: '#ffffff',
+                    transition: 'all 350ms linear',
+                },
+            });
+        @endif
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                const notification3 = new Notification({
+                    text: "{{ $error }}",
+                    showProgress: false,
+                    style: {
+                        background: '#dc3545',
+                        color: '#ffffff',
+                        transition: 'all 350ms linear',
+                    },
+                });
+            @endforeach
+        @endif
+    </script>
 </body>
 
 </html>

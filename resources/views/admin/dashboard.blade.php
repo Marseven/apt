@@ -24,28 +24,7 @@
             <!-- end page title -->
 
             <div class="row">
-                <div class="col-xl-4">
-                    <div class="card overflow-hidden">
-                        <div class="bg-primary bg-soft">
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="text-primary p-3">
-                                        <h5 class="text-primary">Bon Retour !</h5>
-                                        <p>Tableau de Bord</p>
-                                    </div>
-                                </div>
-                                <div class="col-5 align-self-end">
-                                    <img src="{{ asset('admin/images/profile-img.png') }}" alt="" class="img-fluid">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body pt-0">
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-xl-8">
+                <div class="col-xl-12">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="card mini-stats-wid">
@@ -114,6 +93,42 @@
             </div>
             <!-- end row -->
 
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title mb-4">Bilan de Vote</h4>
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="align-middle">Bureau</th>
+                                            <th class="align-middle">Candidat</th>
+                                            <th class="align-middle">Candidat</th>
+                                            <th class="align-middle">Candidat</th>
+                                            <th class="align-middle">Candidat</th>
+                                            <th class="align-middle">Candidat</th>
+                                            <th class="align-middle">Candidat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><a href="javascript: void(0);" class="text-body fw-bold">Bureau 1</a> </td>
+                                            <td class="align-middle fw-bold">0</td>
+                                            <td class="align-middle fw-bold">0</td>
+                                            <td class="align-middle fw-bold">0</td>
+                                            <td class="align-middle fw-bold">0</td>
+                                            <td class="align-middle fw-bold">0</td>
+                                            <td class="align-middle fw-bold">0</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- end table-responsive -->
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <!-- container-fluid -->
