@@ -88,9 +88,9 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            {{-- <a class="dropdown-item" href="{{ url('/admin/admin-profil') }}"><i
+                            <a class="dropdown-item" href="{{ url('/admin/admin-profil') }}"><i
                                     class="bx bx-user font-size-16 align-middle me-1"></i>
-                                <span key="t-profile">Profil</span></a> --}}
+                                <span key="t-profile">Profil</span></a>
                             <a class="dropdown-item" href="{{ url('/') }}"><i
                                     class="bx bx-home-circle font-size-16 align-middle me-1"></i>
                                 <span key="t-profile">Espace Front</span></a>
@@ -136,24 +136,64 @@
                                 <span key="t-command">Bilan de Vote</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ url('/admin/list-candidats') }}" class="waves-effect">
-                                <i class="bx bxs-user"></i>
-                                <span key="t-command">Liste des Candidats</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/admin/list-desks') }}" class="waves-effect">
-                                <i class="bx bxs-building"></i>
-                                <span key="t-command">Liste des Bureaux de vote</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/admin/list-elections') }}" class="waves-effect">
-                                <i class="bx bxs-file"></i>
-                                <span key="t-command">Liste des Élections</span>
-                            </a>
-                        </li>
+
+                        @if ($user->security_role_id <= 2)
+                            <li>
+                                <a href="{{ url('/admin/list-candidats') }}" class="waves-effect">
+                                    <i class="bx bxs-user"></i>
+                                    <span key="t-command">Liste des Candidats</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/admin/list-desks') }}" class="waves-effect">
+                                    <i class="bx bxs-building"></i>
+                                    <span key="t-command">Liste des Bureaux de vote</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/admin/list-elections') }}" class="waves-effect">
+                                    <i class="bx bxs-file"></i>
+                                    <span key="t-command">Liste des Élections</span>
+                                </a>
+                            </li>
+                        @endif
+
+                        @if ($user->security_role_id <= 2)
+                            <li class="menu-title" key="t-apps">Utiilisateurs</li>
+
+                            @if ($user->security_role_id == 1)
+                                <li>
+                                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                        <i class="bx bx-user"></i>
+                                        <span key="t-ecommerce">Rôle</span>
+                                    </a>
+                                    <ul class="sub-menu" aria-expanded="false">
+                                        <li><a href="{{ url('/admin/security-object') }}" key="t-products">Espace</a>
+                                        </li>
+                                        <li><a href="{{ url('/admin/security-role') }}" key="t-shops">Rôle</a></li>
+                                        <li><a href="{{ url('/admin/security-permission') }}"
+                                                key="t-add-product">Permission</a></li>
+                                    </ul>
+                                </li>
+                            @endif
+
+                            <li>
+                                <a href="{{ url('/admin/list-scrutateurs') }}" class="waves-effect">
+                                    <i class="bx bxs-user"></i>
+                                    <span key="t-command">Liste des Scutateurs</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url('/admin/list-admins') }}" class="waves-effect">
+                                    <i class="bx bxs-user"></i>
+                                    <span key="t-command">Liste des Administrateurs</span>
+                                </a>
+                            </li>
+                        @endif
+
+
+
 
                     </ul>
                 </div>

@@ -32,7 +32,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function admin(User $user)
+    public function admins(User $user)
     {
         $users = User::where('security_role_id', '<=', 2)->get();
         $roles = SecurityRole::all();
@@ -40,18 +40,22 @@ class UserController extends Controller
             ['SecurityRole']
         );
 
-        return view('admin.users.list', ['users' => $users,'roles' => $roles,]);
+        return view('admin.users.admins', ['users' => $users, 'roles' => $roles,]);
     }
 
-    public function customer(User $user)
+    public function scrutateurs(User $user)
     {
-        return view('admin.users.customer');
+        $users = User::where('security_role_id', 3)->get();
+        $roles = SecurityRole::all();
+        $user->load(
+            ['SecurityRole']
+        );
+
+        return view('admin.users.scrutateurs', ['users' => $users, 'roles' => $roles,]);
     }
 
-    public function ajaxCustomers(Request $request)
+    public function ajaxScrutateurs(Request $request)
     {
-        BasicController::he_can('Payments', 'look');
-
 
         ## Read value
         $draw = $request->get('draw');
@@ -128,7 +132,7 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function getCustomer(Request $request)
+    public function getScrutateur(Request $request)
     {
 
         $user = User::find($request->id);
@@ -248,7 +252,7 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function editCustomer(Request $request)
+    public function editScrutateur(Request $request)
     {
         $title = "";
         $body = "";
@@ -334,7 +338,7 @@ class UserController extends Controller
 
         $user->save();
         Log::info('Creation de l\'utilisateur id: ' . $user->id . ' par ' . Auth::user()->name);
-        return redirect('admin/list-users');
+        return back()->with('success', "L'utilisateur a été créé.");
     }
 
     public function update(Request $request, User $user)
