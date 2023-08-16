@@ -20,11 +20,11 @@ class VoteController extends Controller
         return view('admin.vote.index', compact('desks', 'candidats'));
     }
 
-    public function details()
+    public function details(Desk $desk)
     {
         $desks = Desk::all();
         $candidats = Candidat::all();
-        return view('admin.vote.details', compact('desks', 'candidats'));
+        return view('admin.vote.details', compact('desk', 'desks', 'candidats'));
     }
 
     public function  ajaxVotes(Request $request)
@@ -63,20 +63,112 @@ class VoteController extends Controller
             $id = $record->id;
             $label = '<a href="' . url('admin/delais/' . $record->id . '') . '">' . $record->label . '</a>';
 
-            $record_cand = Desk::where('id', $record->id)->with(['candidats' => function ($query) {
-                $query->with(['votes' => function ($query) {
-                    $query->orderByDesc('vote')->limit(1);
-                }]);
-            }])->get();
+            $record_cand =  Desk::where('id', $record->id)->with('bestCandidatVote')->first();
 
-            $candidat = $record_cand->candidats->first();
+            $candidat = $record_cand->bestCandidatVote->first();
 
-            $actions = '<a class="btn btn-outline-primary btn-sm" href="' . url('admin/delais/' . $record->id . '') . '">Détails</a>';
+            if ($candidat) {
+                $nom = $candidat->lastname; // Nom du candidat
+                $prenom = $candidat->firstname; // Prénom du candidat
+
+                $totalVotes = Vote::where('desk_id', $record->id)->sum('vote');
+
+                if ($totalVotes != 0) {
+                    $maxVote = ($candidat->max_vote / $totalVotes) * 100;
+                }
+            }
+
+            //dd($candidat);
+
+            $actions = '<a class="btn btn-outline-primary btn-sm" href="' . url('admin/details/' . $record->id . '') . '">Détails</a>';
 
             $data_arr[] = array(
                 "id" => $id,
                 "label" => $label,
-                "candidat" => $candidat ? $candidat->firstname . '' . $candidat->lastname : "Aucun Candidat",
+                "candidat" => $candidat ? $prenom . ' ' . $nom : "Aucun Candidat",
+                "score" => $candidat ? $maxVote . '%' : "0%",
+                "actions" => $actions,
+            );
+        }
+
+
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $totalRecordswithFilter,
+            "aaData" => $data_arr
+        );
+
+        return response()->json($response);
+    }
+
+    public function  ajaxCandidatVote(Request $request, $desk)
+    {
+        ## Read value
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $rowperpage = $request->get("length"); // Rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = $columnIndex_arr[0]['column']; // Column index
+        $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+        $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $searchValue = $search_arr['value']; // Search value
+
+        // Total records
+        $totalRecords = Candidat::select('count(*) as allcount')->count();
+        $totalRecordswithFilter = Candidat::select('count(*) as allcount')->where('firstname', 'like', '%' . $searchValue . '%')->orWhere('lastname', 'like', '%' . $searchValue . '%')->count();
+
+        // Fetch records
+        $records = Candidat::orderBy($columnName, $columnSortOrder)
+            ->where('candidats.firstname', 'like', '%' . $searchValue . '%')
+            ->orWhere('candidats.lastname', 'like', '%' . $searchValue . '%')
+            ->select('candidats.*')
+            ->skip($start)
+            ->take($rowperpage)
+            ->get();
+
+        $data_arr = array();
+        foreach ($records as $record) {
+
+            $id = $record->id;
+            $candidat = $record->firstname . ' ' . $record->lastname;
+
+            $record->load(['vote' => function ($query) use ($desk) {
+                $query->where('desk_id', $desk);
+            }]);
+
+            $pourcent = 0;
+
+            $totalVotes = Vote::where('desk_id', $record->id)->sum('vote');
+            $vote = $record->vote->first();
+
+            if ($totalVotes != 0 && $vote) {
+                $pourcent = ($vote->vote / $totalVotes) * 100;
+            }
+
+            if ($vote) {
+                $actions = '<a class="btn btn-outline-primary btn-sm modal_edit_action" data-bs-toggle="modal"
+                data-id="' . $record->id . '"
+                data-bs-target="#cardModal" title="edit">
+                <i class="fas fa-edit"></i>
+            </a>';
+            } else {
+                $actions = '<a class="btn btn-outline-success btn-sm modal_edit_action" data-bs-toggle="modal" data-bs-target="#cardModalAdd" title="edit">
+            <i class="fas fa-plus"></i>
+        </a>';
+            }
+
+
+            $data_arr[] = array(
+                "id" => $id,
+                "candidat" => $candidat,
+                "score" => $vote->vote ?? 0,
+                "pourcent" => $pourcent . '%',
                 "actions" => $actions,
             );
         }
@@ -94,36 +186,35 @@ class VoteController extends Controller
 
     public function  getVote(Request $request)
     {
-        $member = Desk::find($request->id);
+        $vote = Vote::where('candidat_id', $request->id)->where('desk_id', $request->desk)->first();
 
         $title = "";
         $body = "";
 
-        if ($request->action == "view") {
+        if ($request->action == "edit") {
 
-            $title = "Partisan N° " . $member->id;
-            $body = '<div class="row">
-                <div class="col-12 mb-5">
-                    <h6 class="mb-0">Nom Complet</h6>
-                    <p class="mb-0">' . $member->firstname . ' ' . $member->lastname . '</p>
-                </div>
+            $body = '<div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabelOne">Mettre à jour le résultat N° : ' . $vote->id . '</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Téléphone
-                    </h6>
-                    <p class="mb-0">' . $member->phone . '</p>
-                </div>
+                </button>
+            </div>
 
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Quartier </h6>
-                    <p class="mb-0">' . $member->country . ' XAF</p>
+            <form action="' .  url('admin/create/' . $request->id . '') . '" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="desk_id" value="' . $request->desk . '">
+                    <input type="hidden" name="candidat_id" value="' . $request->id . '">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Nombre de votes</label>
+                    <input type="number" class="form-control" name="vote" value="' . $vote->vote . '" required>
                 </div>
-
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Date de Création</h6>
-                    <p class="mb-0">' . $member->created_at . '</p>
-                </div>
-            </div>';
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </form>';
         } else {
 
             $body = '
@@ -144,6 +235,13 @@ class VoteController extends Controller
 
     public function create(Request $request)
     {
+
+        $vote = Vote::where('candidat_id', $request->candidat_id)->where('desk_id', $request->desk_id)->first();
+
+        if ($vote) {
+            return back()->with('error', "Ce candidat a déjà un résutat dans ce bureau de vote.");
+        }
+
         $vote = new Vote();
 
         $candidat = Candidat::find($request->candidat_id);

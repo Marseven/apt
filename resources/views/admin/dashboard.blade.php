@@ -103,24 +103,22 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th class="align-middle">Bureau</th>
-                                            <th class="align-middle">Candidat</th>
-                                            <th class="align-middle">Candidat</th>
-                                            <th class="align-middle">Candidat</th>
-                                            <th class="align-middle">Candidat</th>
-                                            <th class="align-middle">Candidat</th>
-                                            <th class="align-middle">Candidat</th>
+                                            @foreach ($candidats as $cd)
+                                                <th class="align-middle">{{ $cd->lastname }}</th>
+                                            @endforeach
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><a href="javascript: void(0);" class="text-body fw-bold">Bureau 1</a> </td>
-                                            <td class="align-middle fw-bold">0</td>
-                                            <td class="align-middle fw-bold">0</td>
-                                            <td class="align-middle fw-bold">0</td>
-                                            <td class="align-middle fw-bold">0</td>
-                                            <td class="align-middle fw-bold">0</td>
-                                            <td class="align-middle fw-bold">0</td>
-                                        </tr>
+                                        @foreach ($desks as $dk)
+                                            <tr>
+                                                <td><a href="javascript: void(0);"
+                                                        class="text-body fw-bold">{{ $dk->label }} </a> </td>
+                                                @foreach ($candidats as $cd)
+                                                    <td class="align-middle fw-bold">0</td>
+                                                @endforeach
+                                            </tr>
+                                        @endforeach
+
                                     </tbody>
                                 </table>
                             </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Desk;
 use App\Models\Election;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ElectionController extends Controller
 {
@@ -123,29 +124,31 @@ class ElectionController extends Controller
             </div>';
         } elseif ($request->action == "edit") {
 
-            $title = "Partisan N° " . $election->id;
-            $body = '<div class="row">
-                <div class="col-12 mb-5">
-                    <h6 class="mb-0">Nom Complet</h6>
-                    <p class="mb-0">' . $election->firstname . ' ' . $election->lastname . '</p>
-                </div>
+            $body = '<div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabelOne">Mettre à jour l\'élection N° : ' . $election->id . '</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
 
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Téléphone
-                    </h6>
-                    <p class="mb-0">' . $election->phone . '</p>
-                </div>
+            </button>
+        </div>
 
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Quartier </h6>
-                    <p class="mb-0">' . $election->hood . '</p>
-                </div>
+        <form action="' .  url('admin/election/' . $request->id . '') . '" method="POST">
+            <div class="modal-body">
 
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Date de Création</h6>
-                    <p class="mb-0">' . $election->created_at . '</p>
-                </div>
-            </div>';
+                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Titre</label>
+                <input type="text" class="form-control" name="label" value="' . $election->label . '" required>
+            </div>
+            <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Date de l\'élection</label>
+                <input type="date" class="form-control" name="date_election" value="' . $election->date_election . '" required>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </form>';
         } else {
 
             $body = '
@@ -170,6 +173,7 @@ class ElectionController extends Controller
 
         $election->label = $request->label;
         $election->date_election = $request->date_election;
+        $election->user_id = Auth::user()->id;
 
         if ($election->save()) {
             return back()->with('success', "L'élection a bien été créé.");
@@ -294,19 +298,14 @@ class ElectionController extends Controller
 
             $title = "Bureau N° " . $desk->id;
             $body = '<div class="row">
-                <div class="col-12 mb-5">
-                    <h6 class="mb-0">Nom Complet</h6>
-                    <p class="mb-0">' . $desk->firstname . ' ' . $desk->lastname . '</p>
+                <div class="col-6 mb-5">
+                    <h6 class="mb-0">Bureau</h6>
+                    <p class="mb-0">' . $desk->label . '</p>
                 </div>
 
                 <div class="col-6 mb-5">
-                    <h6 class="mb-0">Téléphone
+                    <h6 class="mb-0">Quartier
                     </h6>
-                    <p class="mb-0">' . $desk->phone . '</p>
-                </div>
-
-                <div class="col-6 mb-5">
-                    <h6 class="mb-0">Quartier </h6>
                     <p class="mb-0">' . $desk->hood . '</p>
                 </div>
 
@@ -315,6 +314,32 @@ class ElectionController extends Controller
                     <p class="mb-0">' . $desk->created_at . '</p>
                 </div>
             </div>';
+        } elseif ($request->action == "edit") {
+
+            $body = '<div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabelOne">Mettre à jour le bureau N° : ' . $desk->id . '</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+            </button>
+        </div>
+
+        <form action="' .  url('admin/election/' . $request->id . '') . '" method="POST">
+            <div class="modal-body">
+                <input type="hidden" name="_token" value="' . csrf_token() . '">
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Nom du bureau</label>
+                    <input type="text" class="form-control" name="label"  value="' . $desk->label . '" required>
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Quartier</label>
+                    <input type="text" class="form-control" name="hood"  value="' . $desk->hood . '" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </form>';
         } else {
 
             $body = '

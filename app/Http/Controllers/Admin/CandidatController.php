@@ -70,6 +70,11 @@ class CandidatController extends Controller
                         data-id="' . $record->id . '"
                         data-bs-target="#cardModalView" title="view">
                         <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-outline-primary btn-sm modal_edit_action" data-bs-toggle="modal"
+                        data-id="' . $record->id . '"
+                        data-bs-target="#cardModal" title="edit">
+                        <i class="fas fa-edit"></i>
                     </a>';
 
             $actions .= '
@@ -115,8 +120,9 @@ class CandidatController extends Controller
             $title = "Candidat N° " . $candidat->id;
             $body = '<div class="row">
 
-                <div class="col-6 mb-5">
-                    <img src="' . asset($candidat->picture) . '" alt="Akanda Pour Tous" height="30">
+
+                <div class="col-12 mb-5" style="text-align: center">
+                    <img src="' . asset($candidat->picture) . '" alt="Akanda Pour Tous" style="height: auto;width: 7em;" alt="">
                 </div>
 
                 <div class="col-6 mb-5">
@@ -132,7 +138,7 @@ class CandidatController extends Controller
 
                 <div class="col-6 mb-5">
                     <h6 class="mb-0">Élection </h6>
-                    <p class="mb-0">' . $candidat->election->label . ' XAF</p>
+                    <p class="mb-0">' . $candidat->election->label . '</p>
                 </div>
 
                 <div class="col-6 mb-5">
@@ -140,6 +146,51 @@ class CandidatController extends Controller
                     <p class="mb-0">' . $candidat->created_at . '</p>
                 </div>
             </div>';
+        } elseif ($request->action == "edit") {
+
+            $body = '<div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabelOne">Mettre à jour le candidat N° : ' . $candidat->id . '</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+
+                </button>
+            </div>
+
+            <form action="' .  url('admin/candidat/' . $request->id . '') . '" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Photo</label>
+                    <input type="file" class="form-control" name="picture" value="' . $candidat->picture . '">
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Nom</label>
+                    <input type="text" class="form-control" name="lastname" value="' . $candidat->lastname . '" required>
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Prénom</label>
+                    <input type="text" class="form-control" name="firstname" value="' . $candidat->firstname . '" required>
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Parti Politique</label>
+                    <input type="text" class="form-control" name="parti" value="' . $candidat->parti . '">
+                </div>
+                <div class="mb-3">
+                    <label for="recipient-name" class="col-form-label">Élection</label>
+                <select id="selectOne" class="form-control" name="election_id" required>';
+            $elections = Election::all();
+            foreach ($elections as $election) {
+                $body .= '<option value="' . $election->id . '">' . $election->label . '</option>';
+            }
+
+            $body .= '</select>
+            </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+                <button type="submit" class="btn btn-success">Enregistrer</button>
+            </div>
+        </form>';
         } else {
 
             $body = '
@@ -164,7 +215,7 @@ class CandidatController extends Controller
 
         $candidat->lastname = $request->lastname;
         $candidat->firstname = $request->firstname;
-        $candidat->parti = $request->phone;
+        $candidat->parti = $request->parti;
         $candidat->election_id = $request->election_id;
 
         $picture = FileController::picture($request->file('picture'));
@@ -192,8 +243,9 @@ class CandidatController extends Controller
         } else {
             $candidat->lastname = $request->lastname;
             $candidat->firstname = $request->firstname;
-            $candidat->parti = $request->phone;
+            $candidat->parti = $request->parti;
             $candidat->election_id = $request->election_id;
+
             if ($request->file('picture')) {
                 $picture = FileController::picture($request->file('picture'));
                 if ($picture['state'] == false) {

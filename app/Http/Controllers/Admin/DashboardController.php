@@ -27,10 +27,15 @@ class DashboardController extends BasicController
         $nb_desks = Desk::all()->count();
         $nb_candidat = Candidat::all()->count();
 
+        $candidats = Candidat::all();
+        $desks = Desk::all();
+
         return view('admin.dashboard', [
             'nb_member' => $nb_member,
             'nb_desks' => $nb_desks,
             'nb_candidat' => $nb_candidat,
+            'candidats' => $candidats,
+            'desks' => $desks,
         ]);
     }
 }

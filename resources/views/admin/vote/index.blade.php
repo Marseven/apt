@@ -59,6 +59,7 @@
                                         <th>#</th>
                                         <th>Nom du bureau</th>
                                         <th>Candidat Vainqueur</th>
+                                        <th>Score</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -204,7 +205,7 @@
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin-ajax-desks') }}",
+                ajax: "{{ route('admin-ajax-votes') }}",
                 columns: [{
                         data: 'id'
                     },
@@ -213,6 +214,9 @@
                     },
                     {
                         data: 'candidat'
+                    },
+                    {
+                        data: 'score'
                     },
                     {
                         data: 'actions'

@@ -113,11 +113,12 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::post('/ajax-election', [ElectionController::class, 'getElection'])->name('admin-ajax-election');
 
     //votes
-    Route::get('/list-votes', [VoteController::class, 'index'])->name('admin-list-desks');
-    Route::post('/vote/{vote}', [VoteController::class, 'updateVote'])->name('admin-update-vote');
-    Route::post('/details/{desk}', [VoteController::class, 'details'])->name('admin-details-desk');
-    Route::post('/vote', [VoteController::class, 'createVote'])->name('admin-create-vote');
+    Route::get('/list-votes', [VoteController::class, 'index'])->name('admin-list-votes');
+    Route::post('/vote/{vote}', [VoteController::class, 'update'])->name('admin-update-vote');
+    Route::get('/details/{desk}', [VoteController::class, 'details'])->name('admin-details-desk');
+    Route::post('/vote', [VoteController::class, 'create'])->name('admin-create-vote');
     Route::get('/ajax-votes', [VoteController::class, 'ajaxVotes'])->name('admin-ajax-votes');
+    Route::get('/ajax-candidat-votes/{desk}', [VoteController::class, 'ajaxCandidatVote'])->name('admin-ajax-candidat-vote');
     Route::post('/ajax-vote', [VoteController::class, 'getVote'])->name('admin-ajax-vote');
 
     //users

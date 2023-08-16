@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Liste des Bilan de vote</h4>
+                        <h4 class="mb-sm-0 font-size-18">Bureau : {{ $desk->label }}</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
@@ -57,8 +57,9 @@
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Nom du bureau</th>
-                                        <th>Candidat Vainqueur</th>
+                                        <th>Candidat</th>
+                                        <th>Résultat</th>
+                                        <th>Score</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
@@ -94,15 +95,7 @@
                 <div class="modal-body">
                     <form action="{{ route('admin-create-vote') }}" method="POST">
                         @csrf
-                        <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Bureau de vote</label>
-                            <select id="selectOne" class="form-control" name="desk_id" required>
-                                <option>Choisir le bureau</option>
-                                @foreach ($desks as $desk)
-                                    <option value="{{ $desk->id }}">{{ $desk->label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <input type="hidden" class="form-control" name="desk_id" value="{{ $desk->id }}" required>
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Candidat</label>
                             <select id="selectOne" class="form-control" name="candidat_id" required>
@@ -158,7 +151,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Êtes-vous sûr de vouloir supprimer ce candidat ?
+                    Êtes-vous sûr de vouloir supprimer ce résultat ?
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
@@ -204,15 +197,18 @@
                 ],
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('admin-ajax-desks') }}",
+                ajax: "{{ route('admin-ajax-candidat-vote', ['desk' => $desk->id]) }}",
                 columns: [{
                         data: 'id'
                     },
                     {
-                        data: 'label'
+                        data: 'candidat'
                     },
                     {
-                        data: 'hood'
+                        data: 'score'
+                    },
+                    {
+                        data: 'pourcent'
                     },
                     {
                         data: 'actions'
@@ -259,10 +255,11 @@
                     'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
                 },
                 type: "POST",
-                url: "{{ route('admin-ajax-desk') }}",
+                url: "{{ route('admin-ajax-vote') }}",
                 dataType: 'json',
                 data: {
                     "id": id,
+                    "desk": {{ $desk->id }},
                     "action": "edit",
                 },
                 success: function(data) {
