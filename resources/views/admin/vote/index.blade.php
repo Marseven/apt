@@ -217,7 +217,7 @@
                         is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
                         option_html += "<option " + is_selected + "  value='" + result[i].id +
                             "'>" +
-                            result[i].libelle +
+                            result[i].lastname +
                             "</option>";
                     }
 
