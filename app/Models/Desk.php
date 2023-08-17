@@ -21,6 +21,6 @@ class Desk extends Model
         return $this->hasMany(Vote::class)
             ->select('candidat_id', 'desk_id', 'candidats.lastname', 'candidats.firstname', DB::raw('MAX(vote) as max_vote'))
             ->join('candidats', 'votes.candidat_id', '=', 'candidats.id')
-            ->groupBy('candidat_id', 'desk_id');
+            ->groupBy('candidat_id', 'desk_id', 'candidats.lastname');
     }
 }
