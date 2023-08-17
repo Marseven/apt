@@ -118,6 +118,7 @@
                                                         <td class="align-middle fw-bold">
                                                             @php
                                                                 $vote = $cd->vote->first();
+                                                                dd($dk);
                                                             @endphp
                                                             @if ($vote != null && $vote->desk_id == $dk->id)
                                                                 {{ ($vote->vote / $dk->vote) * 100 }}
