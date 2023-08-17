@@ -218,12 +218,13 @@ class CandidatController extends Controller
         $candidat->parti = $request->parti;
         $candidat->election_id = $request->election_id;
 
-        $picture = FileController::picture($request->file('picture'));
-        if ($picture['state'] == false) {
-            return back()->with('error', $picture['message']);
+        if ($request->file('picture')) {
+            $picture = FileController::picture($request->file('picture'));
+            if ($picture['state'] == false) {
+                return back()->with('error', $picture['message']);
+            }
+            $candidat->picture = $picture['url'];
         }
-
-        $candidat->picture = $picture['url'];
 
         if ($candidat->save()) {
             return back()->with('success', "Le candidat a bien été créé.");
