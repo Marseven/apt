@@ -105,8 +105,8 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Bureau de vote</label>
-                            <select id="election" class="form-control linked-select" target="candidat" name="desk_id"
+                            <label for="recipient-name" class="col-form-label">Élection</label>
+                            <select id="election" class="form-control linked-select" target="candidat" name="election_id"
                                 required>
                                 <option>Choisir le bureau</option>
                                 @foreach ($elections as $el)

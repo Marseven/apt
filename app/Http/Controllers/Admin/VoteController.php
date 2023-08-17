@@ -247,10 +247,9 @@ class VoteController extends Controller
 
         $vote = new Vote();
 
-        $candidat = Candidat::find($request->candidat_id);
         $vote->vote = $request->vote;
         $vote->candidat_id = $request->candidat_id;
-        $vote->election_id = $candidat->election_id;
+        $vote->election_id = $request->election_id;
         $vote->desk_id = $request->desk_id;
         $vote->user_id = Auth::user()->id;
 
