@@ -323,7 +323,7 @@ class ElectionController extends Controller
             </button>
         </div>
 
-        <form action="' .  url('admin/election/' . $request->id . '') . '" method="POST">
+        <form action="' .  url('admin/desk/' . $request->id . '') . '" method="POST">
             <div class="modal-body">
                 <input type="hidden" name="_token" value="' . csrf_token() . '">
                 <div class="mb-3">
