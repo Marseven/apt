@@ -11,7 +11,7 @@ class Desk extends Model
     use HasFactory;
 
     // Dans le modèle Candidat
-    public function votes()
+    public function vote()
     {
         return $this->hasMany(Vote::class);
     }
