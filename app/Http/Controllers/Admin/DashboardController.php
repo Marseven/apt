@@ -35,8 +35,16 @@ class DashboardController extends BasicController
 
         foreach ($elections as $el) {
             $results[$i]['label'] = $el->label;
-            $results[$i]['candidats'] = Candidat::where('election_id', $el->id)->get();
-            $results[$i]['desks'] = Desk::all();
+
+            $candidats = Candidat::where('election_id', $el->id)->with(['vote' => function ($query) use ($el) {
+                $query->where('election_id', $el->id);
+            }])->get();
+            $results[$i]['candidats'] = $candidats;
+            $desks = Desk::withSum(['vote' => function ($query) use ($el) {
+                $query->where('election_id', $el->id);
+            }], 'vote_total')
+                ->get();
+            $results[$i]['desks'] = $desks;
             $i++;
         }
 
