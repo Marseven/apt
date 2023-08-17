@@ -108,7 +108,7 @@
                             <label for="recipient-name" class="col-form-label">Élection</label>
                             <select id="election" class="form-control linked-select" target="candidat" name="election_id"
                                 required>
-                                <option>Choisir le bureau</option>
+                                <option>Choisir l'élection</option>
                                 @foreach ($elections as $el)
                                     <option value="{{ $el->id }}">{{ $el->label }}</option>
                                 @endforeach
