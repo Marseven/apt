@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Candidat;
 use App\Models\Desk;
+use App\Models\Election;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,8 +24,9 @@ class VoteController extends Controller
     public function details(Desk $desk)
     {
         $desks = Desk::all();
+        $elections = Election::all();
         $candidats = Candidat::all();
-        return view('admin.vote.details', compact('desk', 'desks', 'candidats'));
+        return view('admin.vote.details', compact('desk', 'desks', 'candidats', 'elections'));
     }
 
     public function  ajaxVotes(Request $request)
@@ -278,6 +280,15 @@ class VoteController extends Controller
             } else {
                 return back()->with('error', "Une erreur s'est produite.");
             }
+        }
+    }
+
+    public function selectData(Request $request)
+    {
+        if ($request->target == 'candidat') {
+            $organization = Candidat::where('election_id', $request->id)->get();
+            $response = json_encode($organization);
+            return response()->json($response);
         }
     }
 }

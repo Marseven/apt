@@ -97,7 +97,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Bureau de vote</label>
-                            <select id="selectOne" class="form-control" name="desk_id" required>
+                            <select id="desk" class="form-control" name="desk_id" required>
                                 <option>Choisir le bureau</option>
                                 @foreach ($desks as $desk)
                                     <option value="{{ $desk->id }}">{{ $desk->label }}</option>
@@ -105,14 +105,18 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Candidat</label>
-                            <select id="selectOne" class="form-control" name="candidat_id" required>
-                                <option>Choisir le candidat</option>
-                                @foreach ($candidats as $candidat)
-                                    <option value="{{ $candidat->id }}">
-                                        {{ $candidat->firstname . ' ' . $candidat->lastname }}
-                                    </option>
+                            <label for="recipient-name" class="col-form-label">Bureau de vote</label>
+                            <select id="election" class="form-control linked-select" target="candidat" name="desk_id"
+                                required>
+                                <option>Choisir le bureau</option>
+                                @foreach ($elections as $el)
+                                    <option value="{{ $el->id }}">{{ $el->label }}</option>
                                 @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label">Candidat</label>
+                            <select id="candidat" class="form-control linked-select" name="candidat_id" required>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -193,6 +197,38 @@
     <!--end::Page Vendors-->
 
     <script>
+        $(".linked-select").change(function() {
+            var id = $(this).val();
+            var target = $(this).attr('target');
+
+            $.ajax({
+                url: "{{ route('adminSelect') }}",
+                data: {
+                    'id': id,
+                    'target': target,
+                },
+                dataType: 'json',
+                success: function(result) {
+                    console.log(result);
+                    result = JSON.parse(result);
+                    var option_html = "<option value='-1'>Choisir</option>";
+
+                    for (i = 0; i < result.length; i++) {
+                        is_selected = $("#" + target).data('val') == result[i].id ? 'selected' : '';
+                        option_html += "<option " + is_selected + "  value='" + result[i].id +
+                            "'>" +
+                            result[i].libelle +
+                            "</option>";
+                    }
+
+                    $("#" + target).html(option_html);
+                    $("#" + target).change();
+                }
+            });
+        });
+
+        $(".linked-select").change();
+
         $(document).ready(function() {
             $('#datatable-buttons').DataTable({
                 language: {

@@ -121,6 +121,8 @@ Route::prefix('admin')->namespace('Admin')->middleware('admin')->group(function 
     Route::get('/ajax-candidat-votes/{desk}', [VoteController::class, 'ajaxCandidatVote'])->name('admin-ajax-candidat-vote');
     Route::post('/ajax-vote', [VoteController::class, 'getVote'])->name('admin-ajax-vote');
 
+    Route::get('select-data', [VoteController::class, 'selectData'])->name('adminSelect');
+
     //users
     Route::get('/admin-profil', [UserController::class, 'profil'])->name('admin-profil');
     Route::get('/list-admins', [UserController::class, 'admins']);

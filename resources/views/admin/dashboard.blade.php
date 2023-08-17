@@ -115,7 +115,7 @@
                                                     <td><a href="javascript: void(0);"
                                                             class="text-body fw-bold">{{ $dk->label }} </a> </td>
                                                     @foreach ($rs['candidats'] as $cd)
-                                                        <td class="align-middle fw-bold">0</td>
+                                                        <td class="align-middle fw-bold">0%</td>
                                                     @endforeach
                                                 </tr>
                                             @endforeach
