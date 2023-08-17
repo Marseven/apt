@@ -116,6 +116,9 @@
                                                             class="text-body fw-bold">{{ $dk->label }} </a> </td>
                                                     @foreach ($rs['candidats'] as $cd)
                                                         <td class="align-middle fw-bold">
+                                                            @php
+                                                                dd($cd->vote);
+                                                            @endphp
                                                             @if ($cd->vote != null)
                                                                 @if ($cd->vote->desk_id == $dk->id)
                                                                     {{ ($cd->vote->vote / $dk->vote_total) * 100 }}
