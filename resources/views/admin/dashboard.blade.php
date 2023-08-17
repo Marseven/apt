@@ -117,12 +117,10 @@
                                                     @foreach ($rs['candidats'] as $cd)
                                                         <td class="align-middle fw-bold">
                                                             @php
-                                                                dd($cd->vote);
+                                                                $vote = $cd->vote->first();
                                                             @endphp
-                                                            @if ($cd->vote->first() != null)
-                                                                @if ($cd->vote->desk_id == $dk->id)
-                                                                    {{ ($cd->vote->vote / $dk->vote_total) * 100 }}
-                                                                @endif
+                                                            @if ($vote != null && $vote->desk_id == $dk->id)
+                                                                {{ ($cd->vote->vote / $dk->vote_total) * 100 }}
                                                             @else
                                                                 0
                                                             @endif
