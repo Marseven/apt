@@ -17,8 +17,9 @@ class VoteController extends Controller
     public function index()
     {
         $desks = Desk::all();
+        $elections = Election::all();
         $candidats = Candidat::all();
-        return view('admin.vote.index', compact('desks', 'candidats'));
+        return view('admin.vote.index', compact('desks', 'candidats', 'elections'));
     }
 
     public function details(Desk $desk)
