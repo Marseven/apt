@@ -7,6 +7,7 @@ use App\Http\Controllers\Front\WelcomeController;
 use App\Models\Atelier;
 use App\Models\Candidat;
 use App\Models\Desk;
+use App\Models\Election;
 use App\Models\Entreprise;
 use App\Models\Membre;
 use App\Models\Payment;
@@ -27,15 +28,26 @@ class DashboardController extends BasicController
         $nb_desks = Desk::all()->count();
         $nb_candidat = Candidat::all()->count();
 
-        $candidats = Candidat::all();
-        $desks = Desk::all();
+        $results = [];
+        $i = 0;
+
+        $elections = Election::all();
+
+        foreach ($elections as $el) {
+            $results[$i]['label'] = $el->label;
+            $results[$i]['candidats'] = Candidat::where('election_id', $el->id);
+            $results[$i]['desks'] = Desk::all();
+            $i++;
+        }
+
+
+
 
         return view('admin.dashboard', [
             'nb_member' => $nb_member,
             'nb_desks' => $nb_desks,
             'nb_candidat' => $nb_candidat,
-            'candidats' => $candidats,
-            'desks' => $desks,
+            'results' => $results,
         ]);
     }
 }

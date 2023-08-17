@@ -95,36 +95,39 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <h4 class="card-title mb-4">Bilan de Vote</h4>
-                            <div class="table-responsive">
-                                <table class="table align-middle table-nowrap mb-0">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th class="align-middle">Bureau</th>
-                                            @foreach ($candidats as $cd)
-                                                <th class="align-middle">{{ $cd->lastname }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($desks as $dk)
+                    @foreach ($results as $rs)
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Bilan de Vote : {{ $rs['label'] }}</h4>
+                                <div class="table-responsive">
+                                    <table class="table align-middle table-nowrap mb-0">
+                                        <thead class="table-light">
                                             <tr>
-                                                <td><a href="javascript: void(0);"
-                                                        class="text-body fw-bold">{{ $dk->label }} </a> </td>
-                                                @foreach ($candidats as $cd)
-                                                    <td class="align-middle fw-bold">0</td>
+                                                <th class="align-middle">Bureau</th>
+                                                @foreach ($rs['candidats'] as $cd)
+                                                    <th class="align-middle">{{ $cd->lastname }}</th>
                                                 @endforeach
                                             </tr>
-                                        @endforeach
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($rs['desks'] as $dk)
+                                                <tr>
+                                                    <td><a href="javascript: void(0);"
+                                                            class="text-body fw-bold">{{ $dk->label }} </a> </td>
+                                                    @foreach ($candidats as $cd)
+                                                        <td class="align-middle fw-bold">0</td>
+                                                    @endforeach
+                                                </tr>
+                                            @endforeach
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- end table-responsive -->
                             </div>
-                            <!-- end table-responsive -->
                         </div>
-                    </div>
+                    @endforeach
+
                 </div>
             </div>
 
