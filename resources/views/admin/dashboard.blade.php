@@ -120,7 +120,7 @@
                                                                 $vote = $cd->vote->first();
                                                             @endphp
                                                             @if ($vote != null && $vote->desk_id == $dk->id)
-                                                                {{ ($vote->vote / $dk->vote_total) * 100 }}
+                                                                {{ ($vote->vote / $dk->vote) * 100 }}
                                                             @else
                                                                 0
                                                             @endif

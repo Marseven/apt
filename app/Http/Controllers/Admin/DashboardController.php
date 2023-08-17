@@ -42,7 +42,7 @@ class DashboardController extends BasicController
             $results[$i]['candidats'] = $candidats;
             $desks = Desk::withSum(['vote' => function ($query) use ($el) {
                 $query->where('election_id', $el->id);
-            }], 'votes.vote')
+            }], 'vote')
                 ->get();
             $results[$i]['desks'] = $desks;
             $i++;
